@@ -59,7 +59,7 @@ cd server
 yarn install
 
 ##env
-MONGODB_URI=your_mongodb_connection_string_here
+MONGO_URI=your_mongodb_connection_string_here
 PORT=5000
 Note: The MongoDB connection string should point to your own MongoDB Atlas or local instance.
 
