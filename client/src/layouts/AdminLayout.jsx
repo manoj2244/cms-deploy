@@ -1,10 +1,15 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+      const confirm = window.confirm("Are you sure you want to logout?");
+  if (!confirm) return;
     localStorage.removeItem("adminLoggedIn");
+      toast.success("Logged out successfully");
+
     navigate("/");
   };
 

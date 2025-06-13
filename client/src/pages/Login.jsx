@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,21 +18,24 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        // Save login flag (or token if needed)
         localStorage.setItem("adminLoggedIn", "true");
+        toast.success("Login successful!");
         navigate("/admin/dashboard");
       }
     } catch (err) {
-      console.error(err);
-      setError("Invalid username or password");
-    }
+  if (err.message === "Network Error") {
+    toast.error("Cannot connect to server. Please try again later.");
+  } else {
+    toast.error("Invalid username or password");
+  }
+}
+
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>

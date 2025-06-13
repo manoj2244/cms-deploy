@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchPosts, deletePost } from "../api/post";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
@@ -20,16 +21,21 @@ const Dashboard = () => {
     getPosts();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this post?")) {
-      try {
-        await deletePost(id);
-        setPosts(posts.filter((post) => post._id !== id));
-      } catch (err) {
-        console.error("Failed to delete post", err);
-      }
-    }
-  };
+ const handleDelete = async (id) => {
+  const confirm = window.confirm("Are you sure you want to delete this post?");
+  if (!confirm) return;
+
+  try {
+    await deletePost(id);
+    toast.success("Post deleted successfully!");
+
+    // Optionally refresh posts after deletion
+    setPosts((prev) => prev.filter((post) => post._id !== id));
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to delete the post.");
+  }
+};
  
 
   return (

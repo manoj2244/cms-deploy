@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createPost, getPostById, updatePost } from "../api/post";
+import { toast } from "react-toastify";
+
 
 const PostForm = () => {
   const { id } = useParams(); 
@@ -36,15 +38,15 @@ const PostForm = () => {
     try {
       if (id) {
         await updatePost(id, newPost);
-        alert("Post updated successfully!");
+      toast.success("Post updated successfully!");
       } else {
         await createPost(newPost);
-        alert("Post created successfully!");
+      toast.success("Post created successfully!");
       }
 
       navigate("/admin/dashboard");
     } catch (error) {
-      console.error("Error saving post:", error);
+    toast.error("Something went wrong!");
     }
   };
 
