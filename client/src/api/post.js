@@ -1,17 +1,17 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+const API = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL });
 
 export const fetchPosts = () => API.get("/posts");
 export const createPost = (data) => API.post("/posts", data);
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 
 export const getPostById = async (id) => {
-  const res = await axios.get(`http://localhost:5000/api/posts/${id}`);
+  const res = await API.get(`/posts/${id}`);
   return res.data;
 };
 
 export const updatePost = async (id, postData) => {
-  const res = await axios.put(`http://localhost:5000/api/posts/${id}`, postData);
+  const res = await API.put(`/posts/${id}`, postData);
   return res.data;
 };
