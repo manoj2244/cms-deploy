@@ -12,10 +12,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", {
-        username,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        { username, password }
+      );
 
       if (res.status === 200) {
         localStorage.setItem("adminLoggedIn", "true");
@@ -23,13 +23,15 @@ const Login = () => {
         navigate("/admin/dashboard");
       }
     } catch (err) {
-  if (err.message === "Network Error") {
-    toast.error("Cannot connect to server. Please try again later.");
-  } else {
-    toast.error("Invalid username or password");
-  }
-}
-
+      if (err.message === "Network Error") {
+        toast.error("Cannot connect to server. Please try again later.");
+      } else if (err.response?.status === 401) {
+        toast.error("Invalid username or password.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+      console.error("Login error:", err);
+    }
   };
 
   return (
@@ -46,6 +48,7 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
+              autoComplete="username"
             />
           </div>
 
@@ -57,6 +60,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
             />
           </div>
 
